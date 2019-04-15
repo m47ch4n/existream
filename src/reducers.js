@@ -1,4 +1,6 @@
 import { handleActions } from 'redux-actions'
+import { combineReducers } from 'redux'
+import { connectRouter } from 'connected-react-router'
 import actions from './actions'
 
 const initialState = {
@@ -8,8 +10,11 @@ const initialState = {
   base_time: ''
 }
 
-export default () => handleActions({
-  [actions.successFetchPlaylist]: (store, action) => ({
-    ...store
-  })
-}, initialState)
+export default (history) => combineReducers({
+  router: connectRouter(history),
+  app: handleActions({
+    [actions.successFetchPlaylist]: (store, action) => ({
+      ...store
+    })
+  }, initialState),
+})
