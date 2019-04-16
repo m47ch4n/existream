@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Form, Input, Button, Icon, Grid, Header, Image } from 'semantic-ui-react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { parseUrl } from 'query-string'
 import logo from '../logo.svg';
-import queryString from 'query-string'
-
-const mapStateToProps = (store) => ({
-  store
-})
+import { shareTwitter } from '../tools'
 
 const floorMnutes = (date, interval) => {
   const minutes = date.getMinutes()
@@ -32,7 +28,7 @@ class Home extends Component {
   }
 
   onPlaylistChange({ target: { value: text }}) {
-    const {query: { list: ls }} = queryString.parseUrl(text)
+    const {query: { list: ls }} = parseUrl(text)
     const list = ls? ls : text
     this.setState({ playlist: list })
 
@@ -65,8 +61,16 @@ class Home extends Component {
     return (
       <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
         <Grid.Column style={{ maxWidth: 450 }}>
-          <Header as='h2' color='teal' textAlign='center'>
-            <Image src={logo} /> existream
+          <Header
+            as='h2'
+            image
+            inverted
+            style={{cursor: 'pointer'}}
+            onClick={() => window.location.href = '/'}
+          >
+            <Image src={logo} />
+            existream
+            <Header.Subheader>Synchronize(Stream) exist playlist on Youtube!</Header.Subheader>
           </Header>
           <Form>
             <Form.Input
@@ -86,14 +90,33 @@ class Home extends Component {
                 inline
               />
             </div>
-            <Input disabled={disable} id='url' fluid size='small' value={this.state.url} className='field'/>
-            <Button disabled={disable} color='teal' onClick={this.onClickCopy}>
+            <Input
+              disabled={disable}
+              id='url'
+              fluid
+              size='small'
+              value={this.state.url}
+              className='field'
+            />
+            <Button
+              disabled={disable}
+              color='teal'
+              onClick={this.onClickCopy}
+            >
               <Icon name='copy' /> Copy URL
             </Button>
-            <Button disabled={disable} color='red' onClick={() => window.location.href = this.state.url}>
+            <Button
+              disabled={disable}
+              color='red'
+              onClick={() => window.location.href = this.state.url}
+            >
               <Icon name='play' /> Go to lobby
             </Button>
-            <Button disabled={disable} color='twitter'>
+            <Button
+              disabled={disable}
+              color='twitter'
+              onClick={() => window.open(shareTwitter())}
+            >
               <Icon name='twitter' /> Share Twitter
             </Button>
           </Form>
@@ -103,4 +126,4 @@ class Home extends Component {
   }
 }
 
-export default connect(mapStateToProps)(Home)
+export default Home

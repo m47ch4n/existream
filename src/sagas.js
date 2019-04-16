@@ -1,18 +1,35 @@
-import { all, fork, takeEvery, put, call } from 'redux-saga/effects'
+import { all, takeEvery, put, call, delay } from 'redux-saga/effects'
 import axios from 'axios'
+import actions from './actions'
 
-const yt_key = ''
+function apiFetch(payload) {
+  return axios.get(
+    '/.netlify/functions/fetch',
+    { params: { playlistId: payload.list }}
+  )
+  .then(({ data }) => ({ playlist: data, error: null }))
+  .catch(error => ({ playlist: null, error }))
+}
 
-function apiPlaylist() {
-  return axios.get('', {
-    params: {
-      key: yt_key,
-    }
-  })
-  .then(({ data }) => { return data })
+function* fetch(action) {
+  const { playlist, error } = yield call(apiFetch, action.payload)
+  if (playlist && !error) {
+    yield put(actions.successFetch(playlist))
+  } else {
+    yield put(actions.failureFetch())
+  }
+}
+
+function* countSaga(action) {
+  while (true) {
+    yield put(actions.tick())
+    yield delay(1000)
+  }
 }
 
 export default function* () {
   yield all([
+    takeEvery(actions.fetch.toString(), fetch),
+    takeEvery(actions.successFetch.toString(), countSaga)
   ])
 }
