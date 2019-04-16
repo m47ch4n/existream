@@ -6,9 +6,11 @@
     "axios": "^0.18.0",
     "connected-react-router": "^6.4.0",
     "history": "^4.9.0",
+    "http-proxy-middleware": "^0.19.1",
     "prop-types": "^15.7.2",
-    "query-string": "^6.4.2",
+    "query-string": "5",
     "react": "^16.8.6",
+    "react-datepicker": "^2.4.0",
     "react-dom": "^16.8.6",
     "react-redux": "^6.0.0",
     "react-router": "^5.0.0",
@@ -21,8 +23,12 @@
     "semantic-ui-react": "^0.86.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "run-p start:**",
+    "start:app": "react-scripts start",
+    "start:lambda": "netlify-lambda serve src/lambda --config ./webpack.functions.js",
+    "build": "run-p build:**",
+    "build:app": "react-scripts build",
+    "build:lambda": "netlify-lambda build src/lambda",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "postbuild": "react-snap"
@@ -37,6 +43,9 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "dotenv": "^7.0.0",
+    "netlify-lambda": "^1.4.4",
+    "npm-run-all": "^4.1.5",
     "react-snap": "^1.23.0"
   }
 }
