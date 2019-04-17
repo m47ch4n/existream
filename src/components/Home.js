@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
-import { Form, Input, Button, Icon, Grid, Header, Image } from 'semantic-ui-react';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import React, { Component } from 'react'
+import { Form, Input, Button, Icon, Grid } from 'semantic-ui-react'
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
 import { parseUrl } from 'query-string'
-import logo from '../logo.svg';
+
+import Header from './Header'
 import { shareTwitter } from '../tools'
 
-const floorMnutes = (date, interval) => {
+const ceilMnutes = (date, interval) => {
   const minutes = date.getMinutes()
-  const newMinutes = interval * Math.floor(minutes / interval)
+  const newMinutes = interval * Math.ceil(minutes / interval)
   date.setMinutes(newMinutes)
   date.setSeconds(0)
   date.setMilliseconds(0)
@@ -17,10 +18,10 @@ const floorMnutes = (date, interval) => {
 
 class Home extends Component {
   constructor(props, context) {
-    super(props, context);
+    super(props, context)
     this.state = {
       playlist: '',
-      date: floorMnutes(new Date(), 5),
+      date: ceilMnutes(new Date(), 5),
       url: ''
     }
     this.onPlaylistChange = this.onPlaylistChange.bind(this)
@@ -51,36 +52,27 @@ class Home extends Component {
   }
 
   onClickCopy() {
-    const text = document.getElementById('url');
+    const text = document.getElementById('url')
     text.select()
     document.execCommand('copy')
   }
 
   render() {
-    const disable = !this.state.url || !this.state.playlist 
+    const { url, playlist, date } = this.state
+    const disable = !url || !playlist 
     return (
       <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
         <Grid.Column style={{ maxWidth: 450 }}>
-          <Header
-            as='h2'
-            image
-            inverted
-            style={{cursor: 'pointer'}}
-            onClick={() => window.location.href = '/'}
-          >
-            <Image src={logo} />
-            existream
-            <Header.Subheader>Synchronize(Stream) exist playlist on Youtube!</Header.Subheader>
-          </Header>
+          <Header />
           <Form>
             <Form.Input
               onChange={this.onPlaylistChange}
-              value={this.state.playlist}
+              value={playlist}
               placeholder='Playlist URL'
             />
             <div className='field'>
               <DatePicker
-                selected={this.state.date}
+                selected={date}
                 onChange={this.onDateChange}
                 showTimeSelect
                 timeFormat="HH:mm"
@@ -95,7 +87,7 @@ class Home extends Component {
               id='url'
               fluid
               size='small'
-              value={this.state.url}
+              value={url}
               className='field'
             />
             <Button
@@ -108,14 +100,14 @@ class Home extends Component {
             <Button
               disabled={disable}
               color='red'
-              onClick={() => window.location.href = this.state.url}
+              onClick={() => window.location.href = url}
             >
               <Icon name='play' /> Go to lobby
             </Button>
             <Button
               disabled={disable}
               color='twitter'
-              onClick={() => window.open(shareTwitter())}
+              onClick={() => window.open(shareTwitter(url))}
             >
               <Icon name='twitter' /> Share Twitter
             </Button>

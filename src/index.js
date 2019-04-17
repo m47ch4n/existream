@@ -1,15 +1,16 @@
-import React from 'react';
-import { hydrate, render } from "react-dom";
+import React from 'react'
+import { hydrate, render } from "react-dom"
 import { Provider } from 'react-redux'
 import { Route, Switch } from 'react-router'
 import { ConnectedRouter } from 'connected-react-router'
 import configureStore, { history } from './configureStore'
-import './index.css';
-import 'semantic-ui-css/semantic.min.css';
-import * as serviceWorker from './serviceWorker';
-import App from './App';
-import Home from './pages/Home'
-import Lobby from './pages/Lobby'
+import './index.css'
+import 'semantic-ui-css/semantic.min.css'
+import * as serviceWorker from './serviceWorker'
+import App from './App'
+import Home from './components/Home'
+import Lobby from './components/Lobby'
+
 
 const store = configureStore()
 
@@ -26,14 +27,14 @@ const contents = (
   </Provider>
 )
 
-const rootElement = document.getElementById("root");
+const rootElement = document.getElementById("root")
 if (rootElement.hasChildNodes()) {
-  hydrate(contents, rootElement);
+  hydrate(contents, rootElement)
 } else {
-  render(contents, rootElement);
+  render(contents, rootElement)
 }
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+serviceWorker.unregister()
