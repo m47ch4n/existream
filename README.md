@@ -1,5 +1,13 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+**This project require Environment value for YouTube Data API (v3) as `YT_KEY`!**
+
+`<project root>/.env`
+
+```:
+YT_KEY=Your API key
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
