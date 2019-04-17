@@ -19,5 +19,4 @@ export const shareTwitter = (url) => {
   const text = 'Synchronize YouTube Playlist on existream!'
   const hashtags = 'existream'
   return 'https://twitter.com/intent/tweet?'+stringify({url, text, hashtags})
-
 }

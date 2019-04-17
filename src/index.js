@@ -12,6 +12,7 @@ import Home from './components/Home'
 import Lobby from './components/Lobby'
 
 
+
 const store = configureStore()
 
 const contents = (
