@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Helmet } from 'react-helmet'
+import { Container } from 'semantic-ui-react'
 
 import './App.css'
 
@@ -21,8 +22,13 @@ class App extends Component {
           <meta name="twitter:card" content="summary" />
         </Helmet>
         <header className="App-header">
-          { this.props.children }
+          <Container>
+            { this.props.children }
+          </Container>
         </header>
+        <footer className="App-footer">
+          <p>Made by <a href="https://www.m47ch4n.net/">m47ch4n</a>.</p>
+        </footer>
       </div>
     )
   }
