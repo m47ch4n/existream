@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Statistic, Button, Icon, Grid } from 'semantic-ui-react'
+import { Statistic, Button, Icon, Grid, Container } from 'semantic-ui-react'
 import { parseUrl } from 'query-string'
 
+import './Lobby.css'
 import Header from './Header'
+import VideoCard from './VideoCard'
 import actions from '../actions'
 import { shareTwitter } from '../tools'
 
@@ -20,16 +22,28 @@ class Lobby extends Component {
   }
 
   render() {
-    const { isLoaded, url, countdown } = this.props
+    const { isLoaded, url, countdown, video, video_index, playlist, time } = this.props
     return (
-      <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
-        <Grid.Column style={{ maxWidth: 450 }}>
+      <Grid textAlign='center'>
+        <Grid.Column>
           <Header />
           { countdown?
             <Statistic style={{display: 'block'}} inverted color='grey'>
               <Statistic.Label>Countdown</Statistic.Label>
               <Statistic.Value>{countdown}</Statistic.Value>
             </Statistic>
+          : null
+          }
+          { video?
+            <Container>
+              <h2>Now Playing</h2>
+              <VideoCard
+                video={video}
+                video_index={video_index}
+                videos={playlist.length}
+                time={time}
+              />
+            </Container>
           : null
           }
           <Button

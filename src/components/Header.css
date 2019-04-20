@@ -1,0 +1,8 @@
+.ui.inverted.header {
+  margin-bottom: 5vh;
+  display: block;
+}
+
+.title {
+  cursor: pointer;
+}

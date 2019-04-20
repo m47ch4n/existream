@@ -16,7 +16,18 @@ export const durationToSeconds = (duration) => {
 }
 
 export const shareTwitter = (url) => {
-  const text = 'Synchronize YouTube Playlist on existream!'
+  const text = 'Synchronize YouTube contents on existream!'
   const hashtags = 'existream'
   return 'https://twitter.com/intent/tweet?'+stringify({url, text, hashtags})
+}
+
+export const interval = 2
+
+export const ceilMnutes = (date) => {
+  const minutes = date.getMinutes() + 1
+  const newMinutes = interval * Math.ceil(minutes / interval)
+  date.setMinutes(newMinutes)
+  date.setSeconds(0)
+  date.setMilliseconds(0)
+  return date
 }
