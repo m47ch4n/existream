@@ -6,3 +6,8 @@
 .title {
   cursor: pointer;
 }
+
+.ui.image img {
+  height: 40vmin;
+  margin: auto;
+}

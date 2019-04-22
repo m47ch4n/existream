@@ -126,7 +126,7 @@ class Home extends Component {
             <Button
               disabled={disable}
               color='twitter'
-              onClick={() => window.open(shareTwitter(url))}
+              onClick={() => window.open(shareTwitter(window.location.origin+url))}
             >
               <Icon name='twitter' /> Share Twitter
             </Button>
