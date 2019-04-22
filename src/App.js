@@ -20,7 +20,7 @@ class App extends Component {
           <meta name="og:description" content="Synchronize YouTube contents" />
           <meta name="og:url"         content={window.location.href} />
           <meta name="twitter:card"   content="summary" />
-          <meta property="og:image"   content="https://existream.netlify.com/static/media/logo.99aaa267.svg"/>
+          <meta property="og:image"   content="https://existream.netlify.com/logo_1024px.png"/>
         </Helmet>
         <header className="App-header">
           <Container>
