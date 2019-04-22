@@ -1,12 +1,16 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<img align="right" width="200" src="https://github.com/m47ch4n/existream/blob/images/logo.png?raw=true" />
 
-**This project require Environment value for YouTube Data API (v3) as `YT_KEY`!**
+# existream
+
+**This project require Environment value for YouTube Data API (v3) as `YT_KEY`.**
 
 `<project root>/.env`
 
 ```:
 YT_KEY=Your API key
 ```
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
