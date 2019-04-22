@@ -16,10 +16,11 @@ class App extends Component {
     return (
       <div className="App">
         <Helmet>
-          <meta name="og:title" content="existream" />
+          <meta name="og:title"       content="existream" />
           <meta name="og:description" content="Synchronize YouTube contents" />
-          <meta name="og:url" content={window.location.href} />
-          <meta name="twitter:card" content="summary" />
+          <meta name="og:url"         content={window.location.href} />
+          <meta name="twitter:card"   content="summary" />
+          <meta property="og:image"   content="https://existream.netlify.com/static/media/logo.99aaa267.svg"/>
         </Helmet>
         <header className="App-header">
           <Container>
