@@ -67,8 +67,8 @@ class Home extends Component {
   onDateChange(date) {
     this.setState({ date: date })
 
-    const { video_id, list_id } = this.state
-    this.changeUrl({ video_id, list_id }, date)
+    const { video_id, list_id, watch } = this.state
+    this.changeUrl({ video_id, list_id }, date, watch)
   }
 
   onClickCopy() {

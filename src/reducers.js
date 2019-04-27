@@ -71,7 +71,7 @@ export default (history) => combineReducers({
       ...state,
       list_id: action.payload.list,
       base_time: action.payload.base_time,
-      watch: JSON.parse(action.payload.watch)
+      watch: action.payload.watch
     }),
     [actions.syncVideo]: (state, action) => ({
       ...state,

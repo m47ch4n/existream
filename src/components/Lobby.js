@@ -23,7 +23,7 @@ class Lobby extends Component {
     super(props, context)
     const { dispatch } = this.props
     const {query: { video_id, list_id, base_time, watch }} = parseUrl(window.location.href)
-    dispatch(actions.fetch({ video_id, list_id, base_time: new Date(base_time), watch }))
+    dispatch(actions.fetch({ video_id, list_id, base_time: new Date(base_time), watch: JSON.parse(watch) }))
     this.onChangeOffset = this.onChangeOffset.bind(this)
     this.syncVideo = this.syncVideo.bind(this)
     this.closeVideo = this.closeVideo.bind(this)
