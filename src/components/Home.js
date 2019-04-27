@@ -1,15 +1,19 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import { Form, Button, Icon, Grid, Popup } from 'semantic-ui-react'
-import DatePicker from "react-datepicker"
+import { Grid } from 'semantic-ui-react'
 import "react-datepicker/dist/react-datepicker.css"
 import { parseUrl } from 'query-string'
 
 import './Home.css'
 import Header from './Header'
+import UrlInput from './UrlInput'
 import DatePickButton from './DatePickButton'
-import { shareTwitter, ceilMnutes, interval } from '../tools'
+import WatchCheckbox from './WatchCheckbox'
+import UrlOutput from './UrlOutput'
+import LobbyButton from './LobbyButton'
+import TwitterButton from './TwitterButton'
+import { ceilMnutes } from '../tools'
 
 const mapStateToProps = (state) => ({
   ...state
@@ -19,118 +23,87 @@ class Home extends Component {
   constructor(props, context) {
     super(props, context)
     this.state = {
-      playlist: '',
-      date: ceilMnutes(new Date(), 5),
+      list_id: '',
+      video_id: '',
+      date: ceilMnutes(new Date()),
       url: '',
-      isOpen: false
+      watch: false
     }
-    this.onPlaylistChange = this.onPlaylistChange.bind(this)
+    this.onIdChange = this.onIdChange.bind(this)
     this.onDateChange = this.onDateChange.bind(this)
     this.onClickCopy = this.onClickCopy.bind(this)
+    this.toggle = this.toggle.bind(this)
   }
 
-  changeUrl(list, date) {
-    if (list) {
-      const url = `/lobby?list=${list}&base_time=${date.toJSON()}`
+  changeUrl({ video_id, list_id }, date, watch) {
+    if (video_id) {
+      const url = `/lobby?video_id=${video_id}&base_time=${date.toJSON()}&watch=${watch}`
+      this.setState({ url: url })
+    } else if (list_id) {
+      const url = `/lobby?list_id=${list_id}&base_time=${date.toJSON()}&watch=${watch}`
       this.setState({ url: url })
     } else {
       this.setState({ url: '' })
     }
   }
 
-  onPlaylistChange({ target: { value: text }}) {
-    const {query: { list: ls }} = parseUrl(text)
-    const list = ls? ls : text
-    this.setState({ playlist: list })
-
-    const { date } = this.state
-    this.changeUrl(list, date)
+  onIdChange({ target: { value: text }}) {
+    const {query: { v: video_id, list: list_id }} = parseUrl(text)
+    // priority: video_id > list_id
+    if (video_id) {
+      this.setState({ video_id: video_id, list_id: '' })
+      const { date, watch } = this.state
+      this.changeUrl({ video_id }, date, watch)
+    } else if (list_id) {
+      this.setState({ video_id: '', list_id: list_id })
+      const { date, watch } = this.state
+      this.changeUrl({ list_id }, date, watch)
+    } else {
+      this.setState({ video_id: '', list_id: '' })
+      this.changeUrl({}, null, null)
+    }
   }
 
   onDateChange(date) {
     this.setState({ date: date })
 
-    const { playlist } = this.state
-    this.changeUrl(playlist, date)
+    const { video_id, list_id } = this.state
+    this.changeUrl({ video_id, list_id }, date)
   }
 
   onClickCopy() {
     const text = document.getElementById('url')
     text.select()
     document.execCommand('copy')
-
-    this.setState({ isOpen: true })
-    this.timeout = setTimeout(() => {
-      this.setState({ isOpen: false })
-    }, 1000)
   }
 
   componentDidMount() {
     this.setState({ isLoaded: true })
   }
 
+  toggle() {
+    const next = !this.state.watch
+    this.setState({ watch: next })
+    const { video_id, list_id, date } = this.state
+    this.changeUrl({ video_id, list_id }, date, next)
+  }
+
   render() {
-    const { url, playlist, date } = this.state
+    const { url, video_id, list_id, date, watch } = this.state
+    const id = video_id ? video_id : list_id ? list_id : ''
     const { dispatch } = this.props
-    const disable = !url || !playlist 
+    const disable = !url || !id
+    const out_url = window.location.host+url
     return (
       <Grid textAlign='center'>
         <Grid.Column>
           <Header />
-          <Form inverted>
-            <Form.Input
-              label='Playlist URL'
-              onChange={this.onPlaylistChange}
-              value={playlist}
-            />
-            <div className='field'>
-              <label>Scheduled date</label>
-              <DatePicker
-                customInput={<DatePickButton />}
-                selected={date}
-                onChange={this.onDateChange}
-                showTimeSelect
-                timeFormat="hh:mm aa"
-                timeIntervals={interval}
-                dateFormat="MM/dd/yyyy hh:mm aa"
-              />
-            </div>
-            <Form.Input
-              label='Created URL'
-              disabled={disable}
-              id='url'
-              value={window.location.origin+url}
-            />
-            <Popup
-              trigger={
-                <Button
-                  disabled={disable}
-                  color='teal'
-                >
-                  <Icon name='copy' /> Copy URL
-                </Button>
-              }
-              content={(<span>Copied! <Icon fitted color='green' name='check' /></span>)}
-              on='click'
-              open={this.state.isOpen}
-              onOpen={this.onClickCopy}
-              position='top right'
-            />
-            <Button
-              disabled={disable}
-              color='red'
-              onClick={() => dispatch(push(url))}
-            >
-              <Icon name='play' /> Go to lobby
-            </Button>
-            <Button
-              disabled={disable}
-              color='twitter'
-              onClick={() => window.open(shareTwitter(window.location.origin+url))}
-            >
-              <Icon name='twitter' /> Share Twitter
-            </Button>
-          </Form>
+          <UrlInput value={id} onChange={this.onIdChange} />
+          <DatePickButton selected={date} onChange={this.onDateChange} />
+          <UrlOutput onClick={this.onClickCopy} disabled={disable} value={out_url} />
+          <WatchCheckbox onChange={this.toggle} checked={watch} />
+          <LobbyButton disabled={disable} onClick={() => dispatch(push(url))} />
+          <TwitterButton disabled={disable} url={window.location.origin+url} />
         </Grid.Column>
       </Grid>
     )

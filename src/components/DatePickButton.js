@@ -1,23 +1,35 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Button } from 'semantic-ui-react'
+import DatePicker from 'react-datepicker'
+import { Button, Container } from 'semantic-ui-react'
 
-class DatePickButton extends Component {
+import { interval } from '../tools'
+
+class PickButton extends Component {
   render() {
     return (
-      <Button
-        onClick={this.props.onClick}
-        fluid
-      >
+      <Button onClick={this.props.onClick} fluid>
         {this.props.value}
       </Button>
     )
   }
 }
 
-DatePickButton.propTypes = {
+PickButton.propTypes = {
   onClick: PropTypes.func,
   value: PropTypes.string
-};
+}
 
-export default DatePickButton
+export default (props) => (
+  <Container>
+    <label>Scheduled date</label>
+    <DatePicker
+      customInput={<PickButton />}
+      showTimeSelect
+      timeFormat="hh:mm aa"
+      timeIntervals={interval}
+      dateFormat="MM/dd/yyyy hh:mm aa"
+      {...props}
+    />
+  </Container>
+)

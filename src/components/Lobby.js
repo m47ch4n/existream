@@ -1,13 +1,18 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Statistic, Button, Icon, Grid, Container } from 'semantic-ui-react'
+import { Grid } from 'semantic-ui-react'
 import { parseUrl } from 'query-string'
 
 import './Lobby.css'
 import Header from './Header'
+import CountDown from './CountDown'
 import VideoCard from './VideoCard'
+import Viewer from './Viewer'
+import OffsetButton from './OffsetButton'
+import ControlButton from './ControlButton'
+import YouTubeButton from './YouTubeButton'
+import TwitterButton from './TwitterButton'
 import actions from '../actions'
-import { shareTwitter } from '../tools'
 
 const mapStateToProps = (store) => ({
   ...store.app
@@ -17,49 +22,56 @@ class Lobby extends Component {
   constructor(props, context) {
     super(props, context)
     const { dispatch } = this.props
-    const {query: { list, base_time }} = parseUrl(window.location.href)
-    dispatch(actions.fetch({ list, base_time: new Date(base_time) }))
+    const {query: { video_id, list_id, base_time, watch }} = parseUrl(window.location.href)
+    dispatch(actions.fetch({ video_id, list_id, base_time: new Date(base_time), watch }))
+    this.onChangeOffset = this.onChangeOffset.bind(this)
+    this.syncVideo = this.syncVideo.bind(this)
+    this.closeVideo = this.closeVideo.bind(this)
+  }
+
+  syncVideo() {
+    this.props.dispatch(actions.syncVideo(true))
+  }
+
+  closeVideo() {
+    this.props.dispatch(actions.closeVideo())
+  }
+
+  onChangeOffset(e) {
+    const value = parseInt(e.target.value)
+    const offset = value >= 0 ? value <= 10 ? value : 10 : 0
+    this.props.dispatch(actions.changeOffset(offset))
   }
 
   render() {
-    const { isLoaded, url, countdown, video, video_index, playlist, time } = this.props
+    const { isLoaded, url, countdown, video, video_index, playlist,
+      time, offset, play_video, play_time, watch } = this.props
     return (
       <Grid textAlign='center'>
         <Grid.Column>
           <Header />
-          { countdown?
-            <Statistic style={{display: 'block'}} inverted color='grey'>
-              <Statistic.Label>Countdown</Statistic.Label>
-              <Statistic.Value>{countdown}</Statistic.Value>
-            </Statistic>
-          : null
-          }
-          { video?
-            <Container>
-              <h2>Now Playing</h2>
-              <VideoCard
-                video={video}
-                video_index={video_index}
-                videos={playlist.length}
-                time={time}
-              />
-            </Container>
-          : null
-          }
-          <Button
-            disabled={!(isLoaded && url)}
-            color='red'
-            onClick={() => window.location.href = url}
-          >
-            <Icon name='play' /> Sync Playlist now!
-          </Button>
-          <Button
-            disabled={!isLoaded}
-            color='twitter'
-            onClick={() => window.open(shareTwitter(window.location.href))}
-          >
-            <Icon name='twitter' /> Share Twitter
-          </Button>
+          <CountDown countdown={countdown} />
+          <VideoCard
+            video={video}
+            video_index={video_index}
+            videos={playlist.length}
+            time={time}
+          />
+          <Viewer
+            watch={watch}
+            video={play_video}
+            start={play_time}
+            syncVideo={() => this.syncVideo()}
+          />
+          <OffsetButton value={offset} onChange={this.onChangeOffset} />
+          <ControlButton
+            closeVideo={() => this.closeVideo()}
+            syncVideo={() => this.syncVideo()}
+            play_video={play_video}
+            watch={watch}
+          />
+          <YouTubeButton href={url} disabled={!(isLoaded && url)} />
+          <TwitterButton disabled={!isLoaded} url={window.location.href} />
         </Grid.Column>
       </Grid>
     )

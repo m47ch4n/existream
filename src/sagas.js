@@ -5,7 +5,7 @@ import actions from './actions'
 function apiFetch(payload) {
   return axios.get(
     '/.netlify/functions/fetch',
-    { params: { playlistId: payload.list }}
+    { params: payload }
   )
   .then(({ data }) => ({ playlist: data, error: null }))
   .catch(error => ({ playlist: null, error }))
@@ -15,12 +15,15 @@ function* fetch(action) {
   const { playlist, error } = yield call(apiFetch, action.payload)
   if (playlist && !error) {
     yield put(actions.successFetch(playlist))
+    if (action.payload.watch) {
+      yield put(actions.syncVideo(action.payload.watch))
+    }
   } else {
     yield put(actions.failureFetch())
   }
 }
 
-function* countSaga(action) {
+function* countSaga(_action) {
   while (true) {
     yield put(actions.tick())
     yield delay(1000)

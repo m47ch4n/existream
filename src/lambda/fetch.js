@@ -3,13 +3,13 @@ import { durationToSeconds } from '../tools'
 
 const { YT_KEY } = process.env
 
-function fetchPlaylist(list) {
+function fetchPlaylist(list_id) {
   return axios.get(
     'https://www.googleapis.com/youtube/v3/playlistItems',
     {
       params: {
         key: YT_KEY,
-        playlistId: list,
+        playlistId: list_id,
         part: 'contentDetails',
         maxResults: 50
     }
@@ -18,14 +18,14 @@ function fetchPlaylist(list) {
   .catch(_error => null)
 }
 
-function fetchVideos(ids) {
-  if(!ids) return null
+function fetchVideos(id) {
+  if(!id) return null
   return axios.get(
     'https://www.googleapis.com/youtube/v3/videos',
     {
       params: {
         key: YT_KEY,
-        id: ids.join(),
+        id: id.join(),
         part: "snippet,contentDetails",
         maxResults: 50
       }
@@ -57,9 +57,9 @@ function fetchVideos(ids) {
 }
 
 exports.handler = async (event, _context) => {
-  const { playlistId } = event.queryStringParameters
-  const playlist = await fetchPlaylist(playlistId)
-  const videos = await fetchVideos(playlist)
+  const { video_id, list_id } = event.queryStringParameters
+  const id = video_id ? [video_id] : await fetchPlaylist(list_id)
+  const videos = await fetchVideos(id)
 
   if (!videos) {
     return {
