@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import { Form, Input, Button, Icon, Grid, Popup } from 'semantic-ui-react'
+import { Form, Button, Icon, Grid, Popup } from 'semantic-ui-react'
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { parseUrl } from 'query-string'
 
 import './Home.css'
 import Header from './Header'
+import DatePickButton from './DatePickButton'
 import { shareTwitter, ceilMnutes, interval } from '../tools'
 
 const mapStateToProps = (state) => ({
@@ -78,15 +79,14 @@ class Home extends Component {
           <Header />
           <Form inverted>
             <Form.Input
-              label='Playlist URL ( ID will be parsed automatically )'
+              label='Playlist URL'
               onChange={this.onPlaylistChange}
               value={playlist}
-              placeholder='Playlist URL'
             />
             <div className='field'>
               <label>Scheduled date</label>
               <DatePicker
-                customInput={<Input />}
+                customInput={<DatePickButton />}
                 selected={date}
                 onChange={this.onDateChange}
                 showTimeSelect
