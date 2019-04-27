@@ -5,18 +5,9 @@ import './Header.css'
 import logo from '../logo.svg'
 
 export default () => (
-  <Header
-    as='h1'
-    image
-    inverted
-  >
-    <div
-      className='title'
-      onClick={() => window.location.href = '/'}
-    >
-      <Image src={logo} />
-      existream
-    </div>
-    <Header.Subheader>Synchronize YouTube contents.</Header.Subheader>
+  <Header as='h1' image inverted>
+    <Image src={logo} href='/' />
+    existream
+    <Header.Subheader>Synchronize YouTube contents</Header.Subheader>
   </Header>
 )

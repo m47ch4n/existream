@@ -1,13 +1,12 @@
 .ui.inverted.header {
-  margin-bottom: 5vh;
-  display: block;
-}
-
-.title {
-  cursor: pointer;
+  margin-bottom: 3vh;
 }
 
 .ui.image img {
-  height: 40vmin;
+  height: 2em;
   margin: auto;
+}
+
+h1.ui.header {
+  font-size: 3rem;
 }

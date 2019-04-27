@@ -21,7 +21,7 @@ export const shareTwitter = (url) => {
   return 'https://twitter.com/intent/tweet?'+stringify({url, text, hashtags})
 }
 
-export const interval = 2
+export const interval = 1
 
 export const ceilMnutes = (date) => {
   const minutes = date.getMinutes() + 1

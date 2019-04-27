@@ -6,13 +6,16 @@ import actions from './actions'
 
 const initialState = {
   list_id: null,
-  playlist: null,
+  playlist: [],
   offset: 1,
   url: null,
   countdown: null,
   video: null,
   video_index: null,
+  play_video: null,
+  play_time: null,
   time: null,
+  watch: false,
   isLoaded: false
 }
 
@@ -43,8 +46,15 @@ const calcNow = (offset, base_time, videos, list_id) => {
     time: (diff_s % loop_s) - acc_s[nextVideoIndex-1],
     video_index: nextVideoIndex,
   }
+  const begins = diff_s === 1 ?
+    {
+      play_video: nows.video,
+      play_time: nows.time
+    }
+  : {}
   return {
     ...nows,
+    ...begins,
     countdown: null,
     url: getUrl(nows.video.id, list_id, nows.video_index, nows.time)
   }
@@ -60,7 +70,24 @@ export default (history) => combineReducers({
     [actions.fetch]: (state, action) => ({
       ...state,
       list_id: action.payload.list,
-      base_time: action.payload.base_time
+      base_time: action.payload.base_time,
+      watch: JSON.parse(action.payload.watch)
+    }),
+    [actions.syncVideo]: (state, action) => ({
+      ...state,
+      play_video: state.video,
+      play_time: state.time,
+      watch: action.payload
+    }),
+    [actions.closeVideo]: (state, _action) => ({
+      ...state,
+      play_video: null,
+      play_time: null,
+      watch: false
+    }),
+    [actions.changeOffset]: (state, action) => ({
+      ...state,
+      offset: action.payload
     }),
     [actions.successFetch]: (state, action) => ({
       ...state,
