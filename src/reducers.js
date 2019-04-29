@@ -1,11 +1,13 @@
 import { handleActions } from 'redux-actions'
 import { combineReducers } from 'redux'
-import { connectRouter } from 'connected-react-router'
+import { connectRouter, LOCATION_CHANGE } from 'connected-react-router'
 import { stringify } from 'query-string'
 import actions from './actions'
 
 const initialState = {
   list_id: null,
+  base_time: null,
+  watch: false,
   playlist: [],
   offset: 1,
   url: null,
@@ -15,7 +17,6 @@ const initialState = {
   play_video: null,
   play_time: null,
   time: null,
-  watch: false,
   isLoaded: false
 }
 
@@ -97,6 +98,9 @@ export default (history) => combineReducers({
     [actions.failureFetch]: (state, _action) => ({
       ...state,
       isLoaded: true
-    })
+    }),
+    [LOCATION_CHANGE]: (_state, _action) => ({
+      ...initialState
+    }),
   }, initialState),
 })

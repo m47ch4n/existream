@@ -2,7 +2,7 @@ import React from 'react'
 import { Container, Input, Label } from 'semantic-ui-react'
 
 export default (props) => (
-  <Container>
+  <Container id='offset-button'>
     <Input
       labelPosition='right'
       type='number'
@@ -10,7 +10,7 @@ export default (props) => (
       max='10'
       {...props}
     >
-      <Label>Offset time</Label>
+      <Label>Offsets</Label>
       <input />
       <Label basic>sec</Label>
     </Input>

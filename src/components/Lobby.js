@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { push } from 'connected-react-router'
 import { Grid } from 'semantic-ui-react'
 import { parseUrl } from 'query-string'
 
@@ -45,11 +46,11 @@ class Lobby extends Component {
 
   render() {
     const { isLoaded, url, countdown, video, video_index, playlist,
-      time, offset, play_video, play_time, watch } = this.props
+      time, offset, play_video, play_time, watch, dispatch } = this.props
     return (
       <Grid textAlign='center'>
         <Grid.Column>
-          <Header />
+          <Header onClick={() => dispatch(push('/'))} />
           <CountDown countdown={countdown} />
           <VideoCard
             video={video}

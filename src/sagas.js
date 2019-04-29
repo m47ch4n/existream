@@ -1,4 +1,5 @@
-import { all, takeEvery, put, call, delay } from 'redux-saga/effects'
+import { all, takeEvery, put, call, cancel, delay, fork, take } from 'redux-saga/effects'
+import { LOCATION_CHANGE } from 'connected-react-router'
 import axios from 'axios'
 import actions from './actions'
 
@@ -24,10 +25,15 @@ function* fetch(action) {
 }
 
 function* countSaga(_action) {
-  while (true) {
-    yield put(actions.tick())
-    yield delay(1000)
-  }
+  const watcher = yield fork(function* () {
+    while (true) {
+      yield put(actions.tick())
+      yield delay(1000)
+    }
+  })
+
+  yield take(LOCATION_CHANGE)
+  yield cancel(watcher)
 }
 
 export default function* () {

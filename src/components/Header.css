@@ -5,6 +5,7 @@
 .ui.image img {
   height: 2em;
   margin: auto;
+  cursor: pointer;
 }
 
 h1.ui.header {

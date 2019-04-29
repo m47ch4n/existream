@@ -97,7 +97,7 @@ class Home extends Component {
     return (
       <Grid textAlign='center'>
         <Grid.Column>
-          <Header />
+          <Header onClick={() => dispatch(push('/'))} />
           <UrlInput value={id} onChange={this.onIdChange} />
           <DatePickButton selected={date} onChange={this.onDateChange} />
           <UrlOutput onClick={this.onClickCopy} disabled={disable} value={out_url} />
